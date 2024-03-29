@@ -16,18 +16,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ServerConnector implements Runnable, ServerStartNotifier {
+public class ServerConnector implements Runnable {
     public interface ArrayAdder { public void addToArray(ArrayList<Byte> out, Object []file); }
 
     /**
      * The only IP allowed to talk to the socket
      */
     private final String allowedIp;
-
-    /**
-     * Socket to send server information to the ServersManager (server started/closed)
-     */
-    private final Socket replySocket;
 
     /**
      * Socket to receive <allowedIp>'s requests
@@ -40,11 +35,6 @@ public class ServerConnector implements Runnable, ServerStartNotifier {
     private Socket clientSocket;
 
     /**
-     * Key used to identify this server, while sending server status replies to the ServersManager
-     */
-    private final String replyKey;
-
-    /**
      * Needed to run sync operations
      */
     private final SequentialExecutor executor;
@@ -54,14 +44,11 @@ public class ServerConnector implements Runnable, ServerStartNotifier {
      */
     private final ServerPetition serverPetition;
 
-    public ServerConnector(String allowedIp, int port, Socket reply, String key, SequentialExecutor executor, ServerPetition serverPetition) throws IOException {
+    public ServerConnector(String allowedIp, int port, SequentialExecutor executor, ServerPetition serverPetition) throws IOException {
         this.allowedIp = allowedIp;
         this.serverSocket = new ServerSocket(port);
         this.executor = executor;
         this.serverPetition = serverPetition;
-
-        this.replySocket = reply;
-        this.replyKey = key;
 
         SocketData.loadStaticBlock(BlockReader.class);
         SocketData.loadStaticBlock(EntityType.class);
@@ -492,21 +479,5 @@ public class ServerConnector implements Runnable, ServerStartNotifier {
             default:
                 throw new UnexpectedPacketException("Operation " + (int)operation + " from group 3"); // unimplemented by this version, or error
         }
-    }
-
-    /* reply interfaces */
-
-    @Override
-    public void onServerStart() throws IOException {
-        Message message = new Message(this.replySocket);
-
-        // op player header
-        message.add((byte) 0b0001_1_001);
-        message.add((byte) 0b00000000);
-        message.add((short) 0x0002);
-
-        message.add(this.replyKey);
-
-        message.send();
     }
 }

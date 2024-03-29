@@ -2,7 +2,7 @@ package dev.watchwolf.server.worldguard;
 
 import dev.watchwolf.server.Server;
 import dev.watchwolf.server.WorldGuardServerPetition;
-import dev.watchwolf.utils.Version;
+import dev.watchwolf.entities.Version;
 import org.bukkit.plugin.Plugin;
 
 import java.util.regex.Matcher;

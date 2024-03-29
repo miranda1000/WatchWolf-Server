@@ -6,29 +6,19 @@
 
     <groupId>dev.watchwolf</groupId>
     <artifactId>watchwolf-server</artifactId>
-    <version>0.2.1</version>
+    <version>0.3</version>
     <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.test.skip>true</maven.test.skip>
     </properties>
 
     <dependencies>
-        <!--<dependency>
-            <groupId>dev.watchwolf</groupId>
-            <artifactId>watchwolf-tester</artifactId>
-            <version>LATEST</version>
-            <scope>compile</scope>
-        </dependency>-->
-
         <dependency>
             <groupId>dev.watchwolf</groupId>
             <artifactId>watchwolf-tester</artifactId>
             <version>0.2.1</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/watchwolf-tester-0.2.1.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -42,12 +32,12 @@
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
-            <version>LATEST</version>
+            <version>9.9.0</version>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>WatchWolf-${project.version}-1.8-1.19.4</finalName>
+        <finalName>WatchWolf-${project.version}-1.8-LATEST</finalName>
 
         <pluginManagement>
             <plugins>
@@ -79,48 +69,21 @@
                 </configuration>
             </plugin>
 
-            <!-- attach watchwolf-tester -->
+            <!-- attach dependencies to the .jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>dev.watchwolf</groupId>
-                                    <artifactId>watchwolf-tester</artifactId>
-                                    <outputDirectory>${project.build.directory}/classes</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- attach XSeries -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
                 <configuration>
-                    <relocations>
-                        <relocation>
-                            <pattern>com.cryptomorin.xseries</pattern>
-                            <shadedPattern>dev.watchwolf.server.xseries</shadedPattern>
-                        </relocation>
-                    </relocations>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
+                        <goals><goal>single</goal></goals>
                     </execution>
                 </executions>
             </plugin>
@@ -134,7 +97,45 @@
         </resources>
     </build>
 
-    <repositories>
+    <profiles>
+        <profile>
+            <id>local-ww-core-profile</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <!-- attach local watchwolf-core -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <version>2.5.2</version>
+                        <executions>
+                            <execution>
+                                <id>install-ww-core</id>
+                                <phase>clean</phase>
+                                <configuration>
+                                    <file>${basedir}/lib/watchwolf-tester-0.2.1.jar</file>
+                                    <repositoryLayout>default</repositoryLayout>
+                                    <groupId>dev.watchwolf</groupId>
+                                    <artifactId>watchwolf-tester</artifactId>
+                                    <version>0.2.1</version>
+                                    <packaging>jar</packaging>
+                                    <generatePom>true</generatePom>
+                                </configuration>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <!--<repositories>
         <repository>
             <id>watchwolf-tester-repo</id>
             <url>https://maven.pkg.github.com/rogermiranda1000/watchwolf-tester</url>
@@ -147,5 +148,5 @@
             <name>GitHub rogermiranda1000 Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/rogermiranda1000/watchwolf-server</url>
         </repository>
-    </distributionManagement>
+    </distributionManagement>-->
 </project>
