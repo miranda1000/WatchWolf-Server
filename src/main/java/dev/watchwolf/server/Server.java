@@ -87,17 +87,14 @@ public class Server extends JavaPlugin implements ServerPetition, SequentialExec
             }
         }, 0L, 1);
 
-        // notify back once the server has fully started
-        this.run(()->{
-            try {
-                getLogger().info("Hosting on " + port + " (for " + ip + ")");
-                this.connector = new ServerConnector(ip, port, this, this);
+        try {
+            getLogger().info("Hosting on " + port + " (for " + ip + ")");
+            this.connector = new ServerConnector(ip, port, this, this);
 
-                new Thread(this.connector).start();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+            new Thread(this.connector).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // TODO events?
     }
