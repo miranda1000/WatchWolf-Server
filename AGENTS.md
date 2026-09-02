@@ -97,3 +97,12 @@ phase, which is why `--preclean` matters after swapping a jar.
 - There are **no automated tests in this repo**; coverage lives in WatchWolf-Tester's
   `src/test/java`, which drives a real server running this plugin.
 - `ServerConnector` accepts any connection today — the `allowedIp` check is a `TODO`.
+
+## Git conventions
+
+- **`dev` is the working branch.** Every WatchWolf repo integrates and releases from `dev`.
+  `master` (`main` in the WatchWolf standard repo) is downstream of it — never commit there
+  directly, and never open a PR against it.
+- **One branch per change, named for its kind:** `fix/<topic>` for defects, `feature/<topic>` for
+  new work. Branch from `dev`.
+- **Always open a PR into `dev`.** Do not push straight to `dev`, even for a one-line change.
