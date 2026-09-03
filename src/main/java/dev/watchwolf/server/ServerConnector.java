@@ -89,7 +89,10 @@ public class ServerConnector implements Runnable {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 } catch (UnexpectedPacketException ex) {
-                    ex.printStackTrace();
+                    // we don't know how many argument bytes follow a header we can't read, so we
+                    // can't drain them; carrying on would only misparse every packet after this one
+                    System.err.println("Dropping the connection with " + this.describeConnection() + ": " + ex.getMessage());
+                    break;
                 }
             }
 
@@ -101,6 +104,15 @@ public class ServerConnector implements Runnable {
                 }
             }
         }
+    }
+
+    /**
+     * Names the connection a message is about, so a log line from a server running several tests
+     * says which one it came from.
+     */
+    private String describeConnection() {
+        if (this.clientSocket == null) return "(no client)";
+        return this.clientSocket.getInetAddress().getHostAddress() + ":" + this.clientSocket.getPort();
     }
 
     private void processGroup(int group, DataInputStream dis, DataOutputStream dos) throws IOException, UnexpectedPacketException {
