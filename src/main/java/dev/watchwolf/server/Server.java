@@ -1,14 +1,14 @@
 package dev.watchwolf.server;
 
 import com.cryptomorin.xseries.XMaterial;
-import dev.watchwolf.entities.Container;
-import dev.watchwolf.entities.Difficulty;
-import dev.watchwolf.entities.Position;
-import dev.watchwolf.entities.blocks.Block;
-import dev.watchwolf.entities.entities.Chicken;
-import dev.watchwolf.entities.entities.Entity;
-import dev.watchwolf.entities.files.ConfigFile;
-import dev.watchwolf.entities.items.Item;
+import dev.watchwolf.core.entities.Container;
+import dev.watchwolf.core.entities.Difficulty;
+import dev.watchwolf.core.entities.Position;
+import dev.watchwolf.core.entities.blocks.Block;
+import dev.watchwolf.core.entities.entities.Chicken;
+import dev.watchwolf.core.entities.entities.Entity;
+import dev.watchwolf.core.entities.files.ConfigFile;
+import dev.watchwolf.core.entities.items.Item;
 import dev.watchwolf.server.events.invincibility.OnPlayerDamage;
 import dev.watchwolf.server.events.whitelist.OfflineSpigotWhitelistResolver;
 import dev.watchwolf.server.events.whitelist.ServerWhitelistResolver;

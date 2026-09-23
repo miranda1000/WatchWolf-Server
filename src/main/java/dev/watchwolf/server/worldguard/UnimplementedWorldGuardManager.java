@@ -1,6 +1,6 @@
 package dev.watchwolf.server.worldguard;
 
-import dev.watchwolf.entities.Position;
+import dev.watchwolf.core.entities.Position;
 import dev.watchwolf.server.WorldGuardServerPetition;
 
 import java.io.IOException;

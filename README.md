@@ -57,11 +57,11 @@ across.
 
 ### Dependencies
 
-`lib/` is gitignored; put these in place before building (`--preclean` installs them into your
-local Maven repository):
+`lib/` is gitignored. The Spigot API jar must be provided; the build script prepares Core from a
+sibling checkout when one is available:
 
 - `lib/spigot-1.16.5.jar` — spigot 1.16.5
-- `lib/watchwolf-tester-0.2.1.jar` — [WatchWolf-Tester](https://github.com/miranda1000/WatchWolf-Tester), exported as a `.jar`
+- `lib/watchwolf-core-0.3.3.jar` — [WatchWolf-Core](https://github.com/watch-wolf/WatchWolf-Core)
 
 Maven pulls `com.github.cryptomorin:XSeries` on its own; it is what keeps the plugin working
 across every Minecraft version despite compiling against the 1.16.5 API.

@@ -1,12 +1,12 @@
 package dev.watchwolf.server;
 
-import dev.watchwolf.entities.*;
-import dev.watchwolf.entities.blocks.Block;
-import dev.watchwolf.entities.blocks.BlockReader;
-import dev.watchwolf.entities.entities.Entity;
-import dev.watchwolf.entities.entities.EntityType;
-import dev.watchwolf.entities.files.ConfigFile;
-import dev.watchwolf.entities.items.Item;
+import dev.watchwolf.core.entities.*;
+import dev.watchwolf.core.entities.blocks.Block;
+import dev.watchwolf.core.entities.entities.Entity;
+import dev.watchwolf.core.entities.files.ConfigFile;
+import dev.watchwolf.core.entities.items.Item;
+import dev.watchwolf.core.protocol.Message;
+import dev.watchwolf.core.protocol.SocketHelper;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -50,8 +50,6 @@ public class ServerConnector implements Runnable {
         this.executor = executor;
         this.serverPetition = serverPetition;
 
-        SocketData.loadStaticBlock(BlockReader.class);
-        SocketData.loadStaticBlock(EntityType.class);
     }
 
     public void close() {
@@ -165,13 +163,13 @@ public class ServerConnector implements Runnable {
                 break;
 
             case 0x0005:
-                position = (Position) SocketData.readSocketData(dis, Position.class);
-                block = (Block) SocketData.readSocketData(dis, Block.class);
+                position = (Position) SocketHelper.readObject(dis, Position.class);
+                block = (Block) SocketHelper.readObject(dis, Block.class);
                 this.executor.run(() -> this.serverPetition.setBlock(position, block));
                 break;
 
             case 0x0006:
-                position = (Position) SocketData.readSocketData(dis, Position.class);
+                position = (Position) SocketHelper.readObject(dis, Position.class);
                 this.executor.run(() -> {
                     Block b = this.serverPetition.getBlock(position);
                     Message msg = new Message(dos);
@@ -206,7 +204,7 @@ public class ServerConnector implements Runnable {
 
             case 0x0008:
                 nick = SocketHelper.readString(dis);
-                item = (Item)SocketData.readSocketData(dis, Item.class);
+                item = (Item)SocketHelper.readObject(dis, Item.class);
                 this.executor.run(() -> this.serverPetition.giveItem(nick, item));
                 break;
 
@@ -260,7 +258,7 @@ public class ServerConnector implements Runnable {
 
             case 0x000C:
                 nick = SocketHelper.readString(dis);
-                position = (Position) SocketData.readSocketData(dis, Position.class);
+                position = (Position) SocketHelper.readObject(dis, Position.class);
                 this.executor.run(() -> this.serverPetition.tp(nick, position));
                 break;
 
@@ -316,7 +314,7 @@ public class ServerConnector implements Runnable {
                 break;
 
             case 0x0010:
-                position = (Position) SocketData.readSocketData(dis, Position.class);
+                position = (Position) SocketHelper.readObject(dis, Position.class);
                 radius = SocketHelper.readDouble(dis);
                 this.executor.run(() -> {
                     Entity []entities = this.serverPetition.getEntities(position, radius);
@@ -335,7 +333,7 @@ public class ServerConnector implements Runnable {
                 break;
 
             case 0x0011:
-                entity = (Entity) Entity.readSocketData(dis, Entity.class);
+                entity = (Entity) SocketHelper.readObject(dis, Entity.class);
                 this.executor.run(() -> {
                     Entity e = this.serverPetition.spawnEntity(entity);
                     Message msg = new Message(dos);
@@ -369,7 +367,7 @@ public class ServerConnector implements Runnable {
                 break;
 
             case 0x0013:
-                difficulty = Difficulty.fromSocketData(dis);
+                difficulty = Difficulty.values()[dis.readUnsignedByte()];
                 this.executor.run(() -> this.serverPetition.setDifficulty(difficulty));
                 break;
 
@@ -444,8 +442,8 @@ public class ServerConnector implements Runnable {
         switch (operation) {
             case 0x0001:
                 name = SocketHelper.readString(dis);
-                pos1 = (Position) SocketData.readSocketData(dis, Position.class);
-                pos2 = (Position) SocketData.readSocketData(dis, Position.class);
+                pos1 = (Position) SocketHelper.readObject(dis, Position.class);
+                pos2 = (Position) SocketHelper.readObject(dis, Position.class);
 
                 this.executor.run(() -> this.serverPetition.createRegion(name, pos1, pos2));
                 break;
@@ -469,7 +467,7 @@ public class ServerConnector implements Runnable {
                 break;
 
             case 0x0003:
-                pos1 = (Position) SocketData.readSocketData(dis, Position.class);
+                pos1 = (Position) SocketHelper.readObject(dis, Position.class);
 
                 this.executor.run(() -> {
                     String []regions = this.serverPetition.getRegions(pos1);

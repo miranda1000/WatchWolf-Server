@@ -66,18 +66,17 @@ expects, so the jar can be copied straight there.
 - `lib/spigot-1.16.5.jar` — compiled against the 1.16.5 API, but the plugin is expected to run on
   **1.8 through the latest**, hence XSeries and the reflection/adapters under `worldguard/`,
   `timings/` and `utils/`.
-- `lib/watchwolf-tester-0.2.1.jar` — see the note below.
+- `lib/watchwolf-core-0.3.3.jar` — shared petitions, entities, and socket serialization.
 
-Both are installed into `~/.m2` by the default `local-ww-core-profile` during the **`clean`**
-phase, which is why `--preclean` matters after swapping a jar.
+The Core jar is installed into `~/.m2` by the default `local-ww-core-profile` during the
+**`clean`** phase, which is why `--preclean` matters after swapping it. The Spigot jar is read
+directly from `lib/` as a system dependency.
 
 ## Conventions and gotchas
 
-- **This module still uses the *old* shared library.** It imports `dev.watchwolf.entities.*`,
-  `dev.watchwolf.server.ServerPetition`, `SocketData`, etc. from **watchwolf-tester 0.2.1** — not
-  from `dev.watchwolf.core.*` in [WatchWolf-Core](https://github.com/watch-wolf/WatchWolf-Core).
-  The ServersManager has already migrated; this module has not. Entity/block changes may need to
-  be made in both trees.
+- Shared petitions, entities, and their wire serialization come from
+  [WatchWolf-Core](https://github.com/watch-wolf/WatchWolf-Core). Keep the Core dependency aligned
+  with Tester and ServersManager when changing the protocol model.
 - **The protocol is hand-written here**, not generated: `ServerConnector` switches on raw
   literals such as `0b0001_1_001` and reads arguments field by field. When adding an operation,
   the encoding must match `API/API.tex` in the WatchWolf repo exactly, and the Tester side must

@@ -1,12 +1,12 @@
 package dev.watchwolf.utils;
 
 import com.cryptomorin.xseries.XMaterial;
-import dev.watchwolf.entities.Position;
-import dev.watchwolf.entities.blocks.*;
-import dev.watchwolf.entities.blocks.transformer.Transformers;
-import dev.watchwolf.entities.entities.*;
-import dev.watchwolf.entities.items.Item;
-import dev.watchwolf.entities.items.ItemType;
+import dev.watchwolf.core.entities.Position;
+import dev.watchwolf.core.entities.blocks.*;
+import dev.watchwolf.core.entities.blocks.transformer.Transformers;
+import dev.watchwolf.core.entities.entities.*;
+import dev.watchwolf.core.entities.items.Item;
+import dev.watchwolf.core.entities.items.ItemType;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
