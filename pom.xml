@@ -12,13 +12,14 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <watchwolf-core.version>0.3.3</watchwolf-core.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>dev.watchwolf</groupId>
-            <artifactId>watchwolf-core</artifactId>
-            <version>0.3.3</version>
+            <groupId>com.github.watch-wolf</groupId>
+            <artifactId>WatchWolf-Core</artifactId>
+            <version>${watchwolf-core.version}</version>
         </dependency>
 
         <dependency>
@@ -97,49 +98,18 @@
         </resources>
     </build>
 
-    <profiles>
-        <profile>
-            <id>local-ww-core-profile</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
-            <!-- attach local watchwolf-core -->
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-install-plugin</artifactId>
-                        <version>2.5.2</version>
-                        <executions>
-                            <execution>
-                                <id>install-ww-core</id>
-                                <phase>clean</phase>
-                                <configuration>
-                                    <file>${basedir}/lib/watchwolf-core-0.3.3.jar</file>
-                                    <repositoryLayout>default</repositoryLayout>
-                                    <groupId>dev.watchwolf</groupId>
-                                    <artifactId>watchwolf-core</artifactId>
-                                    <version>0.3.3</version>
-                                    <packaging>jar</packaging>
-                                    <generatePom>true</generatePom>
-                                </configuration>
-                                <goals>
-                                    <goal>install-file</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
-    <!--<distributionManagement>
+    <distributionManagement>
         <repository>
             <id>github</id>
-            <name>GitHub rogermiranda1000 Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/rogermiranda1000/watchwolf-server</url>
+            <name>GitHub miranda1000 Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/miranda1000/watchwolf-server</url>
         </repository>
-    </distributionManagement>-->
+    </distributionManagement>
 </project>
