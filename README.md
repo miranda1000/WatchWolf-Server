@@ -57,14 +57,29 @@ across.
 
 ### Dependencies
 
-`lib/` is gitignored; put these in place before building (`--preclean` installs them into your
-local Maven repository):
+`lib/` is gitignored. Provide the Spigot API jar before building:
 
 - `lib/spigot-1.16.5.jar` — spigot 1.16.5
-- `lib/watchwolf-tester-0.2.1.jar` — [WatchWolf-Tester](https://github.com/miranda1000/WatchWolf-Tester), exported as a `.jar`
+
+Core is resolved as `com.github.watch-wolf:WatchWolf-Core` from JitPack, using Maven's local
+cache. Set the required version with `watchwolf-core.version` in `pom.xml`. If resolution fails,
+`ci/install-core.sh` builds the sibling `../WatchWolf-Core` checkout and installs it under the
+same coordinates. Its version must match the requested version; the checkout is left unchanged.
+Both build and publish run this helper automatically. A Core jar in `lib/` is no longer needed.
 
 Maven pulls `com.github.cryptomorin:XSeries` on its own; it is what keeps the plugin working
 across every Minecraft version despite compiling against the 1.16.5 API.
+
+### Publish to GitHub Packages
+
+Configure server `github` in `~/.m2/settings.xml` with your GitHub username and a classic personal
+access token with `write:packages` and access to `miranda1000/WatchWolf-Server`, then run:
+
+```bash
+./ci/publish.sh
+```
+
+This builds and deploys to `https://maven.pkg.github.com/miranda1000/watchwolf-server` using Docker.
 
 ## Testing
 

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 # default variables
 preclean=0
@@ -18,12 +19,12 @@ echo "[v] Compiling WatchWolf Server..."
 script_path=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 base_path=$(dirname "$script_path")
 local_maven_repos_path="$HOME/.m2"
-if [ $preclean -eq 1 ]; then
-    docker run -it --rm -v "$base_path":"/compile" -v "$local_maven_repos_path":/root/.m2 maven:3.8.4-openjdk-8 mvn clean --file '/compile' # clean project & launch "clean" phase (if any)
-fi
-docker run -it --rm -v "$base_path":"/compile" -v "$local_maven_repos_path":/root/.m2 maven:3.8.4-openjdk-8 mvn compile assembly:single -Dmaven.test.skip=true --file '/compile'
+tty_flags=()
+if [[ -t 0 && -t 1 ]]; then tty_flags=(-it); fi
 
-if [ $? -ne 0 ]; then
-    echo "[e] Exception while compiling WW-Server"
-    exit 1
+"$script_path/install-core.sh"
+
+if [ $preclean -eq 1 ]; then
+    docker run "${tty_flags[@]}" --rm -v "$base_path":"/compile" -v "$local_maven_repos_path":/root/.m2 maven:3.8.4-openjdk-8 mvn clean --file '/compile' # clean project & launch "clean" phase (if any)
 fi
+docker run "${tty_flags[@]}" --rm -v "$base_path":"/compile" -v "$local_maven_repos_path":/root/.m2 maven:3.8.4-openjdk-8 mvn package -Dmaven.test.skip=true --file '/compile'

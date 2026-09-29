@@ -1,6 +1,6 @@
 package dev.watchwolf.server;
 
-import dev.watchwolf.entities.files.ConfigFile;
+import dev.watchwolf.core.entities.files.ConfigFile;
 import dev.watchwolf.server.timings.TimingsManagerFactory;
 import dev.watchwolf.server.timings.TimingsOperator;
 import org.bukkit.plugin.Plugin;

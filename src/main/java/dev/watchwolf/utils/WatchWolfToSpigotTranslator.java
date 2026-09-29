@@ -2,11 +2,11 @@ package dev.watchwolf.utils;
 
 import com.cryptomorin.xseries.XBlock;
 import com.cryptomorin.xseries.XMaterial;
-import dev.watchwolf.entities.Position;
-import dev.watchwolf.entities.blocks.Block;
-import dev.watchwolf.entities.blocks.transformer.Transformers;
-import dev.watchwolf.entities.entities.DroppedItem;
-import dev.watchwolf.entities.items.Item;
+import dev.watchwolf.core.entities.Position;
+import dev.watchwolf.core.entities.blocks.Block;
+import dev.watchwolf.core.entities.blocks.transformer.Transformers;
+import dev.watchwolf.core.entities.entities.DroppedItem;
+import dev.watchwolf.core.entities.items.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -49,11 +49,11 @@ public class WatchWolfToSpigotTranslator {
         return new ItemStack(spigotMaterial.parseMaterial(), item.getAmount());
     }
 
-    public static EntityType getType(dev.watchwolf.entities.entities.EntityType type) {
+    public static EntityType getType(dev.watchwolf.core.entities.entities.EntityType type) {
         return EntityType.valueOf(type.name());
     }
 
-    public static Entity spawnEntity(dev.watchwolf.entities.entities.Entity entity) throws IllegalArgumentException {
+    public static Entity spawnEntity(dev.watchwolf.core.entities.entities.Entity entity) throws IllegalArgumentException {
         World w = Bukkit.getWorld(entity.getPosition().getWorld());
         if (w == null) throw new IllegalArgumentException("World '" + entity.getPosition().getWorld() + "' not found");
 

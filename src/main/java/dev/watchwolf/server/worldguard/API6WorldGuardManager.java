@@ -1,6 +1,6 @@
 package dev.watchwolf.server.worldguard;
 
-import dev.watchwolf.entities.Position;
+import dev.watchwolf.core.entities.Position;
 import dev.watchwolf.server.ExtendedPetitionManager;
 import dev.watchwolf.server.Server;
 import dev.watchwolf.server.WorldGuardServerPetition;
